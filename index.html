@@ -612,7 +612,8 @@
                         // document.querySelector('.tab-button[data-tab="login"]').click();
 
                     } catch (error) {
-                            showMessage('An unexpected error occurred during sign up.', 'error');
+                            // Display the specific error message from the caught error object
+                            showMessage('An unexpected error occurred during sign up: ' + (error.message || 'Unknown error'), 'error');
                             console.error('Sign up error:', error);
                     }
                 });
