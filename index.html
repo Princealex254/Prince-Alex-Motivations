@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prince Alex Motivations</title> <!-- Updated page title -->
+    <title>Prince Alex Motivations</title>
+
+    <!-- Fonts and Supabase JS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Include the Supabase client library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Initialize Supabase -->
     <script>
-        // Supabase configuration
         const supabaseUrl = 'https://htgppvebcwvixsnwbjqf.supabase.co';
         const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0Z3BwdmViY3d2aXhzbndianFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxOTU0NjMsImV4cCI6MjA2ODg3MTQ2M30.ZKXLld0ra_Gs_ujgnDiHxE8ALFB7qwezaHdHGlB4TCY';
-        
-        // Initialize Supabase client globally, immediately after the library is loaded.
-        // This ensures 'Supabase' is defined before 'createClient' is accessed by the main script.
-        const supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
-        console.log("Supabase client initialized", supabase);
+
+        // Use lowercase 'supabase' global to create client
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+        console.log('Supabase client initialized', supabaseClient);
     </script>
+
     <style>
         /* Variables for easier color management */
         :root {
@@ -433,15 +435,9 @@
         </div>
     </div>
 
+    <!-- Main JS handling -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Supabase configuration (These are already global from the head script)
-            // const supabaseUrl = 'https://htgppvebcwvixsnwbjqf.supabase.co';
-            // const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0Z3BwdmViY3d2aXhzbndianFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxOTU0NjMsImV4cCI6MjA2ODg3MTQ2M30.ZKXLld0ra_Gs_ujgnDiHxE8ALFB7qwezaHdHGlB4TCY';
-            
-            // Supabase client 'supabase' is now globally available because it's initialized in the head.
-            // No need to re-initialize or declare it here.
-
             const tabButtons = document.querySelectorAll('.tab-button');
             const formSections = document.querySelectorAll('.form-section');
             const tabIndicator = document.querySelector('.tab-indicator');
@@ -450,35 +446,25 @@
             const forgotPasswordModal = document.getElementById('forgotPasswordModal');
             const modalCloseButton = document.querySelector('.modal-close-button');
             const messageBox = document.getElementById('messageBox');
-
-            // Get form elements
             const loginForm = document.getElementById('loginForm');
             const signupForm = document.getElementById('signupForm');
             const sendResetLinkButton = document.getElementById('sendResetLinkButton');
 
-            /**
-             * Displays a message in the message box.
-             * @param {string} message The message to display.
-             * @param {'success' | 'error'} type The type of message (success or error).
-             */
             const showMessage = (message, type) => {
                 messageBox.textContent = message;
                 messageBox.className = `message-box show ${type}`;
-                // Hide message after 3 seconds
                 setTimeout(() => {
                     messageBox.classList.remove('show');
                 }, 3000);
             };
 
-            // Function to update tab indicator position and width
             const updateTabIndicator = (activeButton) => {
                 const buttonWidth = activeButton.offsetWidth;
                 const buttonLeft = activeButton.offsetLeft;
-                tabIndicator.style.transform = `translateX(${buttonLeft - 5}px)`; // Adjust for padding
+                tabIndicator.style.transform = `translateX(${buttonLeft - 5}px)`;
                 tabIndicator.style.width = `${buttonWidth}px`;
             };
 
-            // Initial positioning for the active tab (Login)
             const initialActiveButton = document.querySelector('.tab-button.active');
             if (initialActiveButton) {
                 updateTabIndicator(initialActiveButton);
@@ -486,52 +472,36 @@
 
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    // Remove active class from all buttons and sections
                     tabButtons.forEach(btn => btn.classList.remove('active'));
                     formSections.forEach(section => section.classList.remove('active'));
-
-                    // Add active class to the clicked button
                     button.classList.add('active');
-
-                    // Show the corresponding form section
                     const targetTabId = button.dataset.tab + '-form';
                     document.getElementById(targetTabId).classList.add('active');
-
-                    // Update tab indicator position
                     updateTabIndicator(button);
                 });
             });
 
             passwordToggles.forEach(toggle => {
                 toggle.addEventListener('click', () => {
-                    // Find the input element associated with this toggle
                     const passwordInput = toggle.previousElementSibling;
                     if (passwordInput && (passwordInput.type === 'password' || passwordInput.type === 'text')) {
-                        if (passwordInput.type === 'password') {
-                            passwordInput.type = 'text';
-                            toggle.textContent = '🙈'; // Change icon to hide
-                        } else {
-                            passwordInput.type = 'password';
-                            toggle.textContent = '👁️'; // Change icon to show
-                        }
-                    } else {
-                        console.error("Password input not found for toggle:", toggle);
+                        passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+                        toggle.textContent = passwordInput.type === 'password' ? '�️' : '🙈';
                     }
                 });
             });
 
-            // Login Form Submission
             if (loginForm) {
                 loginForm.addEventListener('submit', async (event) => {
-                    event.preventDefault(); // Prevent default form submission
-
+                    event.preventDefault();
                     const email = document.getElementById('login-email').value;
                     const password = document.getElementById('login-password').value;
 
                     try {
-                        const { data, error } = await supabase.auth.signInWithPassword({
-                            email: email,
-                            password: password,
+                        // Use the globally initialized supabaseClient
+                        const { data, error } = await supabaseClient.auth.signInWithPassword({
+                            email,
+                            password,
                         });
 
                         if (error) {
@@ -539,8 +509,7 @@
                             return;
                         }
 
-                        // If login is successful, you can optionally fetch profile data
-                        const { data: profileData, error: profileError } = await supabase
+                        const { data: profileData, error: profileError } = await supabaseClient
                             .from('profiles')
                             .select('full_name, phone')
                             .eq('id', data.user.id)
@@ -549,7 +518,6 @@
                         if (profileError) {
                             console.error("Error fetching profile:", profileError.message);
                             showMessage('Login successful, but failed to load profile data.', 'error');
-                            // Still redirect if login was successful, even if profile fetch fails
                             setTimeout(() => {
                                 window.location.href = 'prince-alex-quotes-page.html';
                             }, 1500);
@@ -557,11 +525,10 @@
                         }
 
                         showMessage('Login successful! Redirecting...', 'success');
-                        console.log('User profile:', profileData); // Log profile data
-                        // Redirect to the quotes page after a short delay
+                        console.log('User profile:', profileData);
                         setTimeout(() => {
-                            window.location.href = 'prince-alex-quotes-page.html'; // Assuming the quotes page is in the same directory
-                        }, 1500); // 1.5 seconds delay
+                            window.location.href = 'prince-alex-quotes-page.html';
+                        }, 1500);
 
                     } catch (error) {
                         showMessage('An unexpected error occurred during login.', 'error');
@@ -570,11 +537,9 @@
                 });
             }
 
-            // Sign Up Form Submission
             if (signupForm) {
                 signupForm.addEventListener('submit', async (event) => {
-                    event.preventDefault(); // Prevent default form submission
-
+                    event.preventDefault();
                     const fullName = document.getElementById('signup-fullname').value;
                     const email = document.getElementById('signup-email').value;
                     const phone = document.getElementById('signup-phone').value;
@@ -587,10 +552,10 @@
                     }
 
                     try {
-                        // Sign up the user with email and password
-                        const { data, error } = await supabase.auth.signUp({
-                            email: email,
-                            password: password,
+                        // Use the globally initialized supabaseClient
+                        const { data, error } = await supabaseClient.auth.signUp({
+                            email,
+                            password,
                         });
 
                         if (error) {
@@ -598,76 +563,65 @@
                             return;
                         }
 
-                        // If user creation is successful, insert additional profile data
                         if (data.user) {
-                            const { error: profileError } = await supabase
+                            const { error: profileError } = await supabaseClient
                                 .from('profiles')
                                 .insert([
                                     { id: data.user.id, full_name: fullName, phone: phone }
                                 ]);
 
                             if (profileError) {
-                                showMessage('Account created, but failed to save profile data: ' + profileError.message, 'error');
+                                showMessage('Account created, but failed to save profile: ' + profileError.message, 'error');
                                 return;
                             }
                         }
 
-                        showMessage('Account created successfully! Please check your email for verification.', 'success');
-                        // Optionally, switch to login tab after successful signup
-                        // document.querySelector('.tab-button[data-tab="login"]').click();
+                        showMessage('Account created successfully! Check your email.', 'success');
 
                     } catch (error) {
-                            // Display the specific error message from the caught error object
-                            showMessage('An unexpected error occurred during sign up: ' + (error.message || 'Unknown error'), 'error');
-                            console.error('Sign up error:', error);
+                        showMessage('An unexpected error occurred during sign up: ' + (error.message || 'Unknown error'), 'error');
+                        console.error('Sign up error:', error);
                     }
                 });
             }
 
-            // Forgot Password Modal functionality
             if (forgotPasswordButton) {
                 forgotPasswordButton.addEventListener('click', () => {
                     if (forgotPasswordModal) {
-                        forgotPasswordModal.style.display = 'flex'; // Show the modal
+                        forgotPasswordModal.style.display = 'flex';
                     }
                 });
             }
 
             if (modalCloseButton) {
                 modalCloseButton.addEventListener('click', () => {
-                    if (forgotPasswordModal) {
-                        forgotPasswordModal.style.display = 'none'; // Hide the modal
-                        // Clear any previous messages in the modal
-                        const forgotEmailInput = document.getElementById('forgot-email');
-                        if (forgotEmailInput) forgotEmailInput.value = '';
-                    }
+                    forgotPasswordModal.style.display = 'none';
+                    document.getElementById('forgot-email').value = '';
                 });
             }
 
-            // Close modal if clicked outside of content
             if (forgotPasswordModal) {
                 forgotPasswordModal.addEventListener('click', (event) => {
                     if (event.target === forgotPasswordModal) {
                         forgotPasswordModal.style.display = 'none';
-                        const forgotEmailInput = document.getElementById('forgot-email');
-                        if (forgotEmailInput) forgotEmailInput.value = '';
+                        document.getElementById('forgot-email').value = '';
                     }
                 });
             }
 
-            // Send Reset Link Button functionality
             if (sendResetLinkButton) {
                 sendResetLinkButton.addEventListener('click', async () => {
                     const forgotEmail = document.getElementById('forgot-email').value;
 
                     if (!forgotEmail || !forgotEmail.includes('@')) {
-                        showMessage('Please enter a valid email address.', 'error');
+                        showMessage('Please enter a valid email.', 'error');
                         return;
                     }
 
                     try {
-                        const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
-                            redirectTo: window.location.origin + '/reset-password.html', // Replace with your actual reset password page URL
+                        // Use the globally initialized supabaseClient
+                        const { error } = await supabaseClient.auth.resetPasswordForEmail(forgotEmail, {
+                            redirectTo: window.location.origin + '/reset-password.html',
                         });
 
                         if (error) {
@@ -675,15 +629,15 @@
                             return;
                         }
 
-                        showMessage('Password reset link sent to ' + forgotEmail + '. Please check your inbox.', 'success');
+                        showMessage('Password reset link sent to ' + forgotEmail, 'success');
                         setTimeout(() => {
-                            forgotPasswordModal.style.display = 'none'; // Hide modal after success
-                            document.getElementById('forgot-email').value = ''; // Clear email
+                            forgotPasswordModal.style.display = 'none';
+                            document.getElementById('forgot-email').value = '';
                         }, 2000);
 
                     } catch (error) {
-                        showMessage('An unexpected error occurred while sending reset link.', 'error');
-                        console.error('Reset password error:', error);
+                        showMessage('Unexpected error while sending reset link.', 'error');
+                        console.error('Reset error:', error);
                     }
                 });
             }
@@ -691,3 +645,4 @@
     </script>
 </body>
 </html>
+�
