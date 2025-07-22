@@ -424,7 +424,14 @@
     </div>
 
     <script>
+        // Place all script logic inside DOMContentLoaded to ensure the DOM and all external scripts are fully loaded.
         document.addEventListener('DOMContentLoaded', () => {
+            // Supabase configuration
+            const supabaseUrl = 'https://htgppvebcwvixsnwbjqf.supabase.co';
+            const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0Z3BwdmViY3d2aXhzbndianFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxOTU0NjMsImV4cCI6MjA2ODc3MTQ2M30.ZKXLld0ra_Gs_ujgnDiHxE8ALFB7qwezaHdHGlB4TCY';
+            // Initialize Supabase client inside DOMContentLoaded to ensure Supabase object is available
+            const supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
+
             const tabButtons = document.querySelectorAll('.tab-button');
             const formSections = document.querySelectorAll('.form-section');
             const tabIndicator = document.querySelector('.tab-indicator');
@@ -433,11 +440,6 @@
             const forgotPasswordModal = document.getElementById('forgotPasswordModal');
             const modalCloseButton = document.querySelector('.modal-close-button');
             const messageBox = document.getElementById('messageBox');
-
-            // Supabase configuration
-            const supabaseUrl = 'https://htgppvebcwvixsnwbjqf.supabase.co';
-            const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0Z3BwdmViY3d2aXhzbndianFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxOTU0NjMsImV4cCI6MjA2ODc3MTQ2M30.ZKXLld0ra_Gs_ujgnDiHxE8ALFB7qwezaHdHGlB4TCY';
-            const supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
 
             // Get form elements
             const loginForm = document.getElementById('loginForm');
@@ -497,7 +499,7 @@
                     if (passwordInput && (passwordInput.type === 'password' || passwordInput.type === 'text')) {
                         if (passwordInput.type === 'password') {
                             passwordInput.type = 'text';
-                            toggle.textContent = '🙈'; // Change icon to hide
+                            toggle.textContent = '�'; // Change icon to hide
                         } else {
                             passwordInput.type = 'password';
                             toggle.textContent = '👁️'; // Change icon to show
@@ -678,3 +680,4 @@
     </script>
 </body>
 </html>
+�
