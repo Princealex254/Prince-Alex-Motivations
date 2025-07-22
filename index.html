@@ -621,7 +621,7 @@
                     try {
                         // Use the globally initialized supabaseClient
                         const { error } = await supabaseClient.auth.resetPasswordForEmail(forgotEmail, {
-                            redirectTo: window.location.origin + '/reset-password.html',
+                            redirectTo: 'https://prince-alex-motivations.vercel.app/reset-password.html',
                         });
 
                         if (error) {
