@@ -9,6 +9,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Include the Supabase client library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Supabase configuration
+        const supabaseUrl = 'https://htgppvebcwvixsnwbjqf.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0Z3BwdmViY3d2aXhzbndianFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxOTU0NjMsImV4cCI6MjA2ODc3MTQ2M30.ZKXLld0ra_Gs_ujgnDiHxE8ALFB7qwezaHdHGlB4TCY';
+        
+        // Initialize Supabase client globally, immediately after the library is loaded
+        // This ensures 'Supabase' is defined before 'createClient' is accessed.
+        // The destructuring is done from the global 'Supabase' object.
+        const { createClient } = Supabase; 
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        console.log("Supabase client initialized", supabase);
+    </script>
     <style>
         /* Variables for easier color management */
         :root {
@@ -213,7 +225,7 @@
         .primary-button {
             width: 100%;
             padding: 1rem;
-            background-color: var(--primary-green); /* Changed to green */
+            background-color: var(--primary-green); /* Main green color */
             color: var(--white);
             border: none;
             border-radius: 8px;
@@ -424,14 +436,7 @@
     </div>
 
     <script>
-        // Place all script logic inside DOMContentLoaded to ensure the DOM and all external scripts are fully loaded.
         document.addEventListener('DOMContentLoaded', () => {
-            // Supabase configuration
-            const supabaseUrl = 'https://htgppvebcwvixsnwbjqf.supabase.co';
-            const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0Z3BwdmViY3d2aXhzbndianFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxOTU0NjMsImV4cCI6MjA2ODc3MTQ2M30.ZKXLld0ra_Gs_ujgnDiHxE8ALFB7qwezaHdHGlB4TCY';
-            // Initialize Supabase client inside DOMContentLoaded to ensure Supabase object is available
-            const supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
-
             const tabButtons = document.querySelectorAll('.tab-button');
             const formSections = document.querySelectorAll('.form-section');
             const tabIndicator = document.querySelector('.tab-indicator');
@@ -499,7 +504,7 @@
                     if (passwordInput && (passwordInput.type === 'password' || passwordInput.type === 'text')) {
                         if (passwordInput.type === 'password') {
                             passwordInput.type = 'text';
-                            toggle.textContent = '�'; // Change icon to hide
+                            toggle.textContent = '🙈'; // Change icon to hide
                         } else {
                             passwordInput.type = 'password';
                             toggle.textContent = '👁️'; // Change icon to show
@@ -607,8 +612,8 @@
                         // document.querySelector('.tab-button[data-tab="login"]').click();
 
                     } catch (error) {
-                        showMessage('An unexpected error occurred during sign up.', 'error');
-                        console.error('Sign up error:', error);
+                            showMessage('An unexpected error occurred during sign up.', 'error');
+                            console.error('Sign up error:', error);
                     }
                 });
             }
@@ -680,4 +685,3 @@
     </script>
 </body>
 </html>
-�
