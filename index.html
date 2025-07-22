@@ -12,13 +12,11 @@
     <script>
         // Supabase configuration
         const supabaseUrl = 'https://htgppvebcwvixsnwbjqf.supabase.co';
-        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0Z3BwdmViY3d2aXhzbndianFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxOTU0NjMsImV4cCI6MjA2ODc3MTQ2M30.ZKXLld0ra_Gs_ujgnDiHxE8ALFB7qwezaHdHGlB4TCY';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0Z3BwdmViY3d2aXhzbndianFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxOTU0NjMsImV4cCI6MjA2ODg3MTQ2M30.ZKXLld0ra_Gs_ujgnDiHxE8ALFB7qwezaHdHGlB4TCY';
         
-        // Initialize Supabase client globally, immediately after the library is loaded
-        // This ensures 'Supabase' is defined before 'createClient' is accessed.
-        // The destructuring is done from the global 'Supabase' object.
-        const { createClient } = Supabase; 
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        // Initialize Supabase client globally, immediately after the library is loaded.
+        // This ensures 'Supabase' is defined before 'createClient' is accessed by the main script.
+        const supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
         console.log("Supabase client initialized", supabase);
     </script>
     <style>
@@ -437,6 +435,13 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Supabase configuration (These are already global from the head script)
+            // const supabaseUrl = 'https://htgppvebcwvixsnwbjqf.supabase.co';
+            // const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0Z3BwdmViY3d2aXhzbndianFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxOTU0NjMsImV4cCI6MjA2ODg3MTQ2M30.ZKXLld0ra_Gs_ujgnDiHxE8ALFB7qwezaHdHGlB4TCY';
+            
+            // Supabase client 'supabase' is now globally available because it's initialized in the head.
+            // No need to re-initialize or declare it here.
+
             const tabButtons = document.querySelectorAll('.tab-button');
             const formSections = document.querySelectorAll('.form-section');
             const tabIndicator = document.querySelector('.tab-indicator');
