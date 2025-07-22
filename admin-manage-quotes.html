@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Manage Quotes</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f7f7f7;
+    }
+    h1 {
+      color: #4CAF50;
+    }
+    form {
+      margin-bottom: 2rem;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 0.7rem 1.2rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background-color: #fff;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin - Manage Quotes</h1>
+
+  <form id="quoteForm">
+    <input type="text" id="author" placeholder="Author" required />
+    <textarea id="text" placeholder="Quote text" required></textarea>
+    <button type="submit">Add Quote</button>
+  </form>
+
+  <ul id="quoteList"></ul>
+
+  <script>
+    const supabase = supabase.createClient(
+      'https://htgppvebcwvixsnwbjqf.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0Z3BwdmViY3d2aXhzbndianFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxOTU0NjMsImV4cCI6MjA2ODc3MTQ2M30.ZKXLld0ra_Gs_ujgnDiHxE8ALFB7qwezaHdHGlB4TCY'
+    );
+
+    const form = document.getElementById('quoteForm');
+    const list = document.getElementById('quoteList');
+
+    async function fetchQuotes() {
+      const { data, error } = await supabase.from('quotes').select('*').order('id', { ascending: false });
+      list.innerHTML = '';
+      data.forEach(q => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${q.author}</strong><br/>"${q.text}"`;
+        list.appendChild(li);
+      });
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const author = document.getElementById('author').value;
+      const text = document.getElementById('text').value;
+      await supabase.from('quotes').insert([{ author, text }]);
+      form.reset();
+      fetchQuotes();
+    });
+
+    fetchQuotes();
+  </script>
+</body>
+</html>
