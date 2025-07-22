@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prince Alex - Motivational Quotes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #4CAF50;
+            --darker-green: #388E3C;
+            --white: #FFFFFF;
+            --soft-gray-bg: #F5F5F5;
+            --dark-gray-text: #333333;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --dark-gray-btn: #808080; /* Added for consistency */
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 2rem 0; /* Add padding for scrollability */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--soft-gray-bg);
+            color: var(--dark-gray-text);
+            position: relative;
+        }
+
+        .background-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, var(--soft-gray-bg) 80%);
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            width: 90%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative; /* For logout button positioning */
+        }
+
+        .date-display {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .logo svg {
+            fill: var(--primary-green);
+            filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.1));
+        }
+
+        .quotes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            width: 90%;
+            max-width: 1200px;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .quote-card {
+            background-color: var(--white);
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 150px; /* Ensure cards have some height */
+        }
+
+        .quote-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .quote-author {
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--dark-gray-btn);
+            text-align: right;
+        }
+
+        .back-button, .logout-button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 2rem;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .back-button:hover, .logout-button:hover {
+            background-color: var(--darker-green);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px var(--shadow-light);
+        }
+
+        .back-button:active, .logout-button:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px var(--shadow-softer);
+        }
+
+        .logout-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin-top: 0; /* Reset margin from common style */
+            padding: 0.6rem 1.2rem; /* Slightly smaller for header */
+        }
+
+        /* Footer Styles */
+        .footer {
+            margin-top: 4rem; /* Spacing from the last quote card */
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            background-color: var(--white);
+            border-top: 1px solid var(--input-border-light);
+            text-align: center;
+            box-shadow: 0 -5px 15px var(--shadow-light);
+            border-radius: 12px 12px 0 0; /* Rounded top corners */
+        }
+
+        .footer p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--dark-gray-text);
+        }
+
+        .footer a {
+            color: var(--primary-green);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--darker-green);
+            text-decoration: underline;
+        }
+
+
+        /* Responsive adjustments for quotes container */
+        @media (max-width: 768px) {
+            .quotes-container {
+                grid-template-columns: 1fr; /* Single column on mobile */
+                width: 95%;
+            }
+            .page-title {
+                font-size: 2rem;
+            }
+            .logout-button {
+                position: static; /* Stack on mobile */
+                margin-top: 1rem;
+                width: auto;
+            }
+            .header {
+                padding-bottom: 1rem; /* Add some space below logout button if stacked */
+            }
+            .footer {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-gradient"></div>
+
+    <div class="header">
+        <div id="dateDisplay" class="date-display"></div> <!-- Date and Day display -->
+        <h1 class="page-title">Prince Alex Motivational Quotes</h1>
+        <div class="logo">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="var(--primary-green)"/>
+            </svg>
+        </div>
+        <button id="logoutButton" class="logout-button">Logout</button>
+    </div>
+
+    <div id="quotesContainer" class="quotes-container">
+        <!-- Quotes will be dynamically inserted here -->
+    </div>
+
+    <a href="index.html" class="back-button">Back to Login</a>
+
+    <footer class="footer">
+        <p>Contact: <a href="tel:+254717384875">0717384875</a></p>
+        <p>Email: <a href="mailto:senerwaalex@gmail.com">senerwaalex@gmail.com</a></p>
+        <p>&copy; 2024 Prince Alex. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoutButton = document.getElementById('logoutButton');
+            const quotesContainer = document.getElementById('quotesContainer');
+            const dateDisplay = document.getElementById('dateDisplay');
+
+            const allQuotes = [
+                { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+                { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+                { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+                { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+                { text: "The best way to predict the future is to create it.", author: "Peter Drucker" },
+                { text: "Your time is limited, don't waste it living someone else's life.", author: "Steve Jobs" },
+                { text: "The only limit to our realization of tomorrow will be our doubts of today.", author: "Franklin D. Roosevelt" },
+                { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
+                { text: "The mind is everything. What you think you become.", author: "Buddha" },
+                { text: "Strive not to be a success, but rather to be of value.", author: "Albert Einstein" },
+                { text: "The journey of a thousand miles begins with a single step.", author: "Lao Tzu" },
+                { text: "What you get by achieving your goals is not as important as what you become by achieving your goals.", author: "Zig Ziglar" },
+                { text: "The harder the conflict, the more glorious the triumph.", author: "Thomas Paine" },
+                { text: "Do not wait for a leader; do it alone, person to person.", author: "Mother Teresa" },
+                { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+                { text: "If you want to lift yourself up, lift up someone else.", author: "Booker T. Washington" },
+                { text: "Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time.", author: "Thomas A. Edison" },
+                { text: "The best revenge is massive success.", author: "Frank Sinatra" },
+                { text: "The only person you are destined to become is the person you decide to be.", author: "Ralph Waldo Emerson" },
+                { text: "Happiness is not something ready-made. It comes from your own actions.", author: "Dalai Lama XIV" },
+                { text: "The greatest glory in living lies not in never falling, but in rising every time we fall.", author: "Nelson Mandela" },
+                { text: "The future belongs to those who prepare for it today.", author: "Malcolm X" },
+                { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
+                { text: "The only true wisdom is in knowing you know nothing.", author: "Socrates" },
+                { text: "Darkness cannot drive out darkness; only light can do that. Hate cannot drive out hate; only love can do that.", author: "Martin Luther King Jr." },
+                { text: "The purpose of our lives is to be happy.", author: "Dalai Lama XIV" },
+                { text: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
+                { text: "Get busy living or get busy dying.", author: "Stephen King" },
+                { text: "You have brains in your head. You have feet in your shoes. You can steer yourself any direction you choose.", author: "Dr. Seuss" },
+                { text: "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.", author: "Ralph Waldo Emerson" },
+                { text: "Twenty years from now you will be more disappointed by the things that you didn't do than by the ones you did do.", author: "Mark Twain" },
+                { text: "The best and most beautiful things in the world cannot be seen or even touched - they must be felt with the heart.", author: "Helen Keller" },
+                { text: "Challenges are what make life interesting; overcoming them is what makes life meaningful.", author: "Joshua J. Marine" },
+                { text: "The only impossible journey is the one you never begin.", author: "Tony Robbins" },
+                { text: "Success usually comes to those who are too busy to be looking for it.", author: "Henry David Thoreau" },
+                { text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" },
+                { text: "If you look at what you have in life, you'll always have more. If you look at what you don't have in life, you'll never have enough.", author: "Oprah Winfrey" },
+                { text: "If you set your goals ridiculously high and it's a failure, you will fail above everyone else's success.", author: "James Cameron" },
+                { text: "Life is 10% what happens to you and 90% how you react to it.", author: "Charles R. Swindoll" },
+                { text: "The most difficult thing is the decision to act, the rest is merely tenacity.", author: "Amelia Earhart" },
+                { text: "The power of imagination makes us infinite.", author: "John Muir" },
+                { text: "The only true wisdom is in knowing you know nothing.", author: "Socrates" },
+                { text: "It is during our darkest moments that we must focus to see the light.", author: "Aristotle Onassis" },
+                { text: "Keep your eyes on the stars, and your feet on the ground.", author: "Theodore Roosevelt" },
+                { text: "You are never too old to set another goal or to dream a new dream.", author: "C.S. Lewis" },
+                { text: "The purpose of life is not to be happy. It is to be useful, to be honorable, to be compassionate, to have it make some difference that you have lived and lived well.", author: "Ralph Waldo Emerson" },
+                { text: "The biggest adventure you can take is to live the life of your dreams.", author: "Oprah Winfrey" },
+                { text: "To live is the rarest thing in the world. Most people exist, that is all.", author: "Oscar Wilde" },
+                { text: "Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful.", author: "Albert Schweitzer" },
+                { text: "The best way to find yourself is to lose yourself in the service of others.", author: "Mahatma Gandhi" }
+            ];
+
+            /**
+             * Shuffles an array using the Fisher-Yates (Knuth) algorithm.
+             * @param {Array} array The array to shuffle.
+             * @returns {Array} The shuffled array.
+             */
+            const shuffleArray = (array) => {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            };
+
+            /**
+             * Displays a random set of quotes.
+             * @param {number} count The number of quotes to display.
+             */
+            const displayRandomQuotes = (count = 20) => {
+                // Clear existing quotes
+                quotesContainer.innerHTML = '';
+
+                // Shuffle the array of all quotes
+                const shuffledQuotes = shuffleArray([...allQuotes]);
+
+                // Take the first 'count' quotes
+                const quotesToDisplay = shuffledQuotes.slice(0, count);
+
+                // Create and append quote cards
+                quotesToDisplay.forEach(quote => {
+                    const quoteCard = document.createElement('div');
+                    quoteCard.classList.add('quote-card');
+                    quoteCard.innerHTML = `
+                        <p class="quote-text">"${quote.text}"</p>
+                        <p class="quote-author">- ${quote.author}</p>
+                    `;
+                    quotesContainer.appendChild(quoteCard);
+                });
+            };
+
+            /**
+             * Displays the current date and day of the week.
+             */
+            const displayCurrentDate = () => {
+                const now = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                dateDisplay.textContent = now.toLocaleDateString('en-US', options);
+            };
+
+            // Initial display of quotes and date
+            displayCurrentDate();
+            displayRandomQuotes(20); // Display 20 random quotes
+
+            // Logout functionality
+            if (logoutButton) {
+                logoutButton.addEventListener('click', () => {
+                    // Simulate logout action (e.g., clear session/local storage if used)
+                    // For this example, we simply redirect to the login page.
+                    window.location.href = 'index.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

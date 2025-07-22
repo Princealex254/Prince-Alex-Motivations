@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prince Alex Motivations</title> <!-- Updated page title -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Variables for easier color management */
+        :root {
+            --primary-green: #4CAF50; /* Main green color */
+            --darker-green: #388E3C; /* Darker green for hover */
+            --white: #FFFFFF;
+            --soft-gray-bg: #F5F5F5;
+            --dark-gray-text: #333333;
+            --dark-gray-btn: #808080;
+            --input-border-light: #E0E0E0;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-softer: rgba(0, 0, 0, 0.04);
+            --success-color: #4CAF50;
+            --error-color: #F44336;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--soft-gray-bg);
+            color: var(--dark-gray-text);
+            position: relative; /* For absolute positioning of gradient */
+        }
+
+        /* Subtle radial background gradient */
+        .background-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, var(--soft-gray-bg) 80%);
+            opacity: 0.7; /* Adjust as needed for subtlety */
+            z-index: -1;
+        }
+
+        .container {
+            background-color: var(--white);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-light);
+            width: 100%;
+            max-width: 450px; /* Max width for desktop */
+            box-sizing: border-box; /* Include padding in width */
+            text-align: center;
+            position: relative;
+            z-index: 1; /* Ensure it's above the background */
+            transition: transform 0.3s ease-in-out; /* For subtle entrance if desired */
+            margin: 2rem 0; /* Add vertical margin to ensure scrollability if content is tall */
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 95%; /* Adjust for mobile screens */
+                padding: 1.5rem;
+                margin: 1rem; /* Add some margin on smaller screens */
+            }
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-gray-text);
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .logo svg {
+            fill: var(--primary-green); /* Changed to green */
+            /* Optional: subtle shadow for the logo */
+            filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.1));
+        }
+
+        .tab-switch {
+            display: flex;
+            position: relative;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            overflow: hidden; /* Ensures indicator stays within bounds */
+            background-color: var(--soft-gray-bg); /* Background for the tab switcher */
+            padding: 5px; /* Creates a slight border effect with the background */
+            box-shadow: inset 0 1px 3px var(--shadow-softer);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark-gray-text);
+            border-radius: 8px; /* Match inner indicator */
+            transition: color 0.3s ease, background-color 0.3s ease;
+            position: relative;
+            z-index: 2; /* Ensures buttons are above indicator */
+        }
+
+        .tab-button.active {
+            color: var(--white);
+        }
+
+        .tab-indicator {
+            position: absolute;
+            top: 5px; /* Matches padding of .tab-switch */
+            left: 5px; /* Matches padding of .tab-switch */
+            width: calc(50% - 5px); /* Half width minus padding */
+            height: calc(100% - 10px); /* Full height minus padding */
+            background-color: var(--primary-green); /* Changed to green */
+            border-radius: 8px;
+            transition: transform 0.3s ease-in-out;
+            z-index: 1;
+            box-shadow: 0 2px 8px var(--shadow-light);
+        }
+
+        .tab-button[data-tab="signup"].active ~ .tab-indicator {
+            transform: translateX(calc(100% + 5px)); /* Move to the right */
+        }
+
+        .form-section {
+            display: none; /* Hidden by default */
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .form-section.active {
+            display: block; /* Shown when active */
+            opacity: 1;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.8rem; /* Increased spacing */
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 1px solid var(--input-border-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--dark-gray-text);
+            background-color: var(--soft-gray-bg);
+            box-sizing: border-box; /* Include padding in element's total width and height */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: inset 0 1px 3px var(--shadow-softer); /* Soft inner shadow */
+        }
+
+        /* Placeholder-as-label effect */
+        .input-group input:focus,
+        .input-group input:not(:placeholder-shown) {
+            border-color: var(--primary-green); /* Changed to green */
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2); /* Subtle green glow */
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray-text);
+            font-size: 1rem;
+            pointer-events: none; /* Make sure label doesn't block input clicks */
+            transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease, transform 0.3s ease;
+            background-color: var(--soft-gray-bg); /* Ensure background for label when animated */
+            padding: 0 0.2rem;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: -0.6rem; /* Move label above input */
+            font-size: 0.8rem;
+            color: var(--primary-green); /* Changed to green */
+            background-color: var(--white); /* Ensure background for label when animated */
+            padding: 0 0.4rem; /* More padding to cover border */
+            transform: translateY(0%);
+        }
+
+
+        .password-toggle {
+            position: absolute;
+            right: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--dark-gray-text);
+            font-size: 1.1rem;
+            user-select: none;
+        }
+
+        .primary-button {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary-green); /* Changed to green */
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .primary-button:hover {
+            background-color: var(--darker-green); /* Darker green on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px var(--shadow-light);
+        }
+
+        .primary-button:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px var(--shadow-softer);
+        }
+
+        .reset-password-button {
+            background: transparent;
+            border: none;
+            color: var(--dark-gray-btn); /* Keeping dark gray for contrast */
+            font-size: 0.95rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .reset-password-button:hover {
+            color: var(--primary-green); /* Green highlight on hover */
+            background-color: rgba(76, 175, 80, 0.05); /* Very light green background */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 100; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: auto;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-light);
+            width: 80%; /* Could be responsive */
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-content h2 {
+            color: var(--primary-green);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-content p {
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .modal-close-button {
+            background-color: var(--primary-green);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-close-button:hover {
+            background-color: var(--darker-green);
+        }
+
+        /* Message Box Styles */
+        .message-box {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            position: absolute;
+            width: calc(100% - 5rem); /* Adjust for container padding */
+            top: 0; /* Position at the top of the container */
+            left: 2.5rem; /* Match container padding */
+            box-sizing: border-box;
+            z-index: 5; /* Above other elements */
+        }
+
+        .message-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .message-box.success {
+            background-color: rgba(76, 175, 80, 0.15); /* Light green background */
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .message-box.error {
+            background-color: rgba(244, 67, 54, 0.15); /* Light red background */
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="background-gradient"></div> <!-- For the subtle background effect -->
+
+    <div class="container">
+        <h1 class="page-title">Prince Alex</h1> <!-- Updated page title -->
+
+        <!-- Message Box Container -->
+        <div id="messageBox" class="message-box"></div>
+
+        <div class="logo">
+            <!-- Replace with your actual logo/SVG -->
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="var(--primary-green)"/>
+            </svg>
+        </div>
+
+        <div class="tab-switch">
+            <button class="tab-button active" data-tab="login">Login</button>
+            <button class="tab-button" data-tab="signup">Sign Up</button>
+            <div class="tab-indicator"></div>
+        </div>
+
+        <div id="login-form" class="form-section active">
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="email" id="login-email" placeholder=" " required>
+                    <label for="login-email">Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="login-password" placeholder=" " required>
+                    <label for="login-password">Password</label>
+                    <span class="password-toggle">👁️</span>
+                </div>
+                <button type="submit" class="primary-button">Login</button>
+                <button type="button" class="reset-password-button">Forgot Password?</button>
+            </form>
+        </div>
+
+        <div id="signup-form" class="form-section">
+            <form id="signupForm">
+                <div class="input-group">
+                    <input type="text" id="signup-fullname" placeholder=" " required>
+                    <label for="signup-fullname">Full Name</label>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="signup-email" placeholder=" " required>
+                    <label for="signup-email">Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="tel" id="signup-phone" placeholder=" ">
+                    <label for="signup-phone">Phone Number</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="signup-password" placeholder=" " required>
+                    <label for="signup-password">Password</label>
+                    <span class="password-toggle">👁️</span>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="signup-confirm-password" placeholder=" " required>
+                    <label for="signup-confirm-password">Confirm Password</label>
+                    <span class="password-toggle">👁️</span>
+                </div>
+                <button type="submit" class="primary-button">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <h2>Forgot Your Password?</h2>
+            <p>Enter your email address below and we'll send you a link to reset your password.</p>
+            <div class="input-group">
+                <input type="email" id="forgot-email" placeholder=" " required>
+                <label for="forgot-email">Email Address</label>
+            </div>
+            <button type="button" id="sendResetLinkButton" class="primary-button">Send Reset Link</button>
+            <button type="button" class="modal-close-button" style="margin-top: 1rem;">Close</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const formSections = document.querySelectorAll('.form-section');
+            const tabIndicator = document.querySelector('.tab-indicator');
+            const passwordToggles = document.querySelectorAll('.password-toggle');
+            const forgotPasswordButton = document.querySelector('.reset-password-button');
+            const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+            const modalCloseButton = document.querySelector('.modal-close-button');
+            const messageBox = document.getElementById('messageBox');
+
+            // Get form elements
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const sendResetLinkButton = document.getElementById('sendResetLinkButton');
+
+            /**
+             * Displays a message in the message box.
+             * @param {string} message The message to display.
+             * @param {'success' | 'error'} type The type of message (success or error).
+             */
+            const showMessage = (message, type) => {
+                messageBox.textContent = message;
+                messageBox.className = `message-box show ${type}`;
+                // Hide message after 3 seconds
+                setTimeout(() => {
+                    messageBox.classList.remove('show');
+                }, 3000);
+            };
+
+            // Function to update tab indicator position and width
+            const updateTabIndicator = (activeButton) => {
+                const buttonWidth = activeButton.offsetWidth;
+                const buttonLeft = activeButton.offsetLeft;
+                tabIndicator.style.transform = `translateX(${buttonLeft - 5}px)`; // Adjust for padding
+                tabIndicator.style.width = `${buttonWidth}px`;
+            };
+
+            // Initial positioning for the active tab (Login)
+            const initialActiveButton = document.querySelector('.tab-button.active');
+            if (initialActiveButton) {
+                updateTabIndicator(initialActiveButton);
+            }
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons and sections
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    formSections.forEach(section => section.classList.remove('active'));
+
+                    // Add active class to the clicked button
+                    button.classList.add('active');
+
+                    // Show the corresponding form section
+                    const targetTabId = button.dataset.tab + '-form';
+                    document.getElementById(targetTabId).classList.add('active');
+
+                    // Update tab indicator position
+                    updateTabIndicator(button);
+                });
+            });
+
+            passwordToggles.forEach(toggle => {
+                toggle.addEventListener('click', () => {
+                    // Find the input element associated with this toggle
+                    const passwordInput = toggle.previousElementSibling;
+                    if (passwordInput && (passwordInput.type === 'password' || passwordInput.type === 'text')) {
+                        if (passwordInput.type === 'password') {
+                            passwordInput.type = 'text';
+                            toggle.textContent = '🙈'; // Change icon to hide
+                        } else {
+                            passwordInput.type = 'password';
+                            toggle.textContent = '👁️'; // Change icon to show
+                        }
+                    } else {
+                        console.error("Password input not found for toggle:", toggle);
+                    }
+                });
+            });
+
+            // Login Form Submission
+            if (loginForm) {
+                loginForm.addEventListener('submit', (event) => {
+                    event.preventDefault(); // Prevent default form submission
+
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+
+                    // Simulate API call or validation
+                    if (email === 'test@example.com' && password === 'password123') {
+                        showMessage('Login successful! Redirecting...', 'success');
+                        // Redirect to the quotes page after a short delay
+                        setTimeout(() => {
+                            window.location.href = 'prince-alex-quotes-page.html'; // Assuming the quotes page is in the same directory
+                        }, 1500); // 1.5 seconds delay
+                    } else {
+                        showMessage('Invalid email or password.', 'error');
+                    }
+                });
+            }
+
+            // Sign Up Form Submission
+            if (signupForm) {
+                signupForm.addEventListener('submit', (event) => {
+                    event.preventDefault(); // Prevent default form submission
+
+                    const fullName = document.getElementById('signup-fullname').value;
+                    const email = document.getElementById('signup-email').value;
+                    const phone = document.getElementById('signup-phone').value;
+                    const password = document.getElementById('signup-password').value;
+                    const confirmPassword = document.getElementById('signup-confirm-password').value;
+
+                    if (password !== confirmPassword) {
+                        showMessage('Passwords do not match.', 'error');
+                        return;
+                    }
+
+                    // Simulate API call or validation (e.g., check if email already exists)
+                    // For demonstration, let's say 'existing@example.com' is taken
+                    if (email === 'existing@example.com') {
+                        showMessage('Email already registered. Please use a different email.', 'error');
+                    } else {
+                        showMessage('Account created successfully!', 'success');
+                        // In a real app, you would send data to server and handle response
+                        // Optionally, switch to login tab after successful signup
+                        // document.querySelector('.tab-button[data-tab="login"]').click();
+                    }
+                });
+            }
+
+            // Forgot Password Modal functionality
+            if (forgotPasswordButton) {
+                forgotPasswordButton.addEventListener('click', () => {
+                    if (forgotPasswordModal) {
+                        forgotPasswordModal.style.display = 'flex'; // Show the modal
+                    }
+                });
+            }
+
+            if (modalCloseButton) {
+                modalCloseButton.addEventListener('click', () => {
+                    if (forgotPasswordModal) {
+                        forgotPasswordModal.style.display = 'none'; // Hide the modal
+                        // Clear any previous messages in the modal
+                        const forgotEmailInput = document.getElementById('forgot-email');
+                        if (forgotEmailInput) forgotEmailInput.value = '';
+                    }
+                });
+            }
+
+            // Close modal if clicked outside of content
+            if (forgotPasswordModal) {
+                forgotPasswordModal.addEventListener('click', (event) => {
+                    if (event.target === forgotPasswordModal) {
+                        forgotPasswordModal.style.display = 'none';
+                        const forgotEmailInput = document.getElementById('forgot-email');
+                        if (forgotEmailInput) forgotEmailInput.value = '';
+                    }
+                });
+            }
+
+            // Send Reset Link Button functionality
+            if (sendResetLinkButton) {
+                sendResetLinkButton.addEventListener('click', () => {
+                    const forgotEmail = document.getElementById('forgot-email').value;
+
+                    if (!forgotEmail || !forgotEmail.includes('@')) {
+                        showMessage('Please enter a valid email address.', 'error');
+                        return;
+                    }
+
+                    // Simulate sending reset link
+                    if (forgotEmail === 'user@example.com') { // Simulate a registered user
+                        showMessage('Password reset link sent to ' + forgotEmail, 'success');
+                        setTimeout(() => {
+                            forgotPasswordModal.style.display = 'none'; // Hide modal after success
+                            document.getElementById('forgot-email').value = ''; // Clear email
+                        }, 2000);
+                    } else {
+                        showMessage('Email not found. Please check your email address.', 'error');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
