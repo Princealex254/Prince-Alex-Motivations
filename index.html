@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Include the Supabase client library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* Variables for easier color management */
         :root {
@@ -432,6 +434,11 @@
             const modalCloseButton = document.querySelector('.modal-close-button');
             const messageBox = document.getElementById('messageBox');
 
+            // Supabase configuration
+            const supabaseUrl = 'https://htgppvebcwvixsnwbjqf.supabase.co';
+            const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh0Z3BwdmViY3d2aXhzbndianFmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMxOTU0NjMsImV4cCI6MjA2ODc3MTQ2M30.ZKXLld0ra_Gs_ujgnDiHxE8ALFB7qwezaHdHGlB4TCY';
+            const supabase = Supabase.createClient(supabaseUrl, supabaseAnonKey);
+
             // Get form elements
             const loginForm = document.getElementById('loginForm');
             const signupForm = document.getElementById('signupForm');
@@ -503,28 +510,57 @@
 
             // Login Form Submission
             if (loginForm) {
-                loginForm.addEventListener('submit', (event) => {
+                loginForm.addEventListener('submit', async (event) => {
                     event.preventDefault(); // Prevent default form submission
 
                     const email = document.getElementById('login-email').value;
                     const password = document.getElementById('login-password').value;
 
-                    // Simulate API call or validation
-                    if (email === 'test@example.com' && password === 'password123') {
+                    try {
+                        const { data, error } = await supabase.auth.signInWithPassword({
+                            email: email,
+                            password: password,
+                        });
+
+                        if (error) {
+                            showMessage(error.message, 'error');
+                            return;
+                        }
+
+                        // If login is successful, you can optionally fetch profile data
+                        const { data: profileData, error: profileError } = await supabase
+                            .from('profiles')
+                            .select('full_name, phone')
+                            .eq('id', data.user.id)
+                            .single();
+
+                        if (profileError) {
+                            console.error("Error fetching profile:", profileError.message);
+                            showMessage('Login successful, but failed to load profile data.', 'error');
+                            // Still redirect if login was successful, even if profile fetch fails
+                            setTimeout(() => {
+                                window.location.href = 'prince-alex-quotes-page.html';
+                            }, 1500);
+                            return;
+                        }
+
                         showMessage('Login successful! Redirecting...', 'success');
+                        console.log('User profile:', profileData); // Log profile data
                         // Redirect to the quotes page after a short delay
                         setTimeout(() => {
                             window.location.href = 'prince-alex-quotes-page.html'; // Assuming the quotes page is in the same directory
                         }, 1500); // 1.5 seconds delay
-                    } else {
-                        showMessage('Invalid email or password.', 'error');
+
+                    } catch (error) {
+                        showMessage('An unexpected error occurred during login.', 'error');
+                        console.error('Login error:', error);
                     }
                 });
             }
 
             // Sign Up Form Submission
             if (signupForm) {
-                signupForm.addEventListener('submit', (event) => {
+                signupForm.addEventListener('submit', async (event) => {
                     event.preventDefault(); // Prevent default form submission
 
                     const fullName = document.getElementById('signup-fullname').value;
@@ -538,15 +574,39 @@
                         return;
                     }
 
-                    // Simulate API call or validation (e.g., check if email already exists)
-                    // For demonstration, let's say 'existing@example.com' is taken
-                    if (email === 'existing@example.com') {
-                        showMessage('Email already registered. Please use a different email.', 'error');
-                    } else {
-                        showMessage('Account created successfully!', 'success');
-                        // In a real app, you would send data to server and handle response
+                    try {
+                        // Sign up the user with email and password
+                        const { data, error } = await supabase.auth.signUp({
+                            email: email,
+                            password: password,
+                        });
+
+                        if (error) {
+                            showMessage(error.message, 'error');
+                            return;
+                        }
+
+                        // If user creation is successful, insert additional profile data
+                        if (data.user) {
+                            const { error: profileError } = await supabase
+                                .from('profiles')
+                                .insert([
+                                    { id: data.user.id, full_name: fullName, phone: phone }
+                                ]);
+
+                            if (profileError) {
+                                showMessage('Account created, but failed to save profile data: ' + profileError.message, 'error');
+                                return;
+                            }
+                        }
+
+                        showMessage('Account created successfully! Please check your email for verification.', 'success');
                         // Optionally, switch to login tab after successful signup
                         // document.querySelector('.tab-button[data-tab="login"]').click();
+
+                    } catch (error) {
+                        showMessage('An unexpected error occurred during sign up.', 'error');
+                        console.error('Sign up error:', error);
                     }
                 });
             }
@@ -584,7 +644,7 @@
 
             // Send Reset Link Button functionality
             if (sendResetLinkButton) {
-                sendResetLinkButton.addEventListener('click', () => {
+                sendResetLinkButton.addEventListener('click', async () => {
                     const forgotEmail = document.getElementById('forgot-email').value;
 
                     if (!forgotEmail || !forgotEmail.includes('@')) {
@@ -592,15 +652,25 @@
                         return;
                     }
 
-                    // Simulate sending reset link
-                    if (forgotEmail === 'user@example.com') { // Simulate a registered user
-                        showMessage('Password reset link sent to ' + forgotEmail, 'success');
+                    try {
+                        const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
+                            redirectTo: window.location.origin + '/reset-password.html', // Replace with your actual reset password page URL
+                        });
+
+                        if (error) {
+                            showMessage(error.message, 'error');
+                            return;
+                        }
+
+                        showMessage('Password reset link sent to ' + forgotEmail + '. Please check your inbox.', 'success');
                         setTimeout(() => {
                             forgotPasswordModal.style.display = 'none'; // Hide modal after success
                             document.getElementById('forgot-email').value = ''; // Clear email
                         }, 2000);
-                    } else {
-                        showMessage('Email not found. Please check your email address.', 'error');
+
+                    } catch (error) {
+                        showMessage('An unexpected error occurred while sending reset link.', 'error');
+                        console.error('Reset password error:', error);
                     }
                 });
             }
